@@ -54,6 +54,20 @@ npm start
 
 Note: If you do not have npm on your machine, use the Python generator above to inspect submissions.
 
+Admin authentication
+--------------------
+The admin HTML view at `/admin/submissions` is now protected by HTTP Basic authentication.
+
+Set the admin credentials via environment variables before starting the server:
+
+```bash
+export ADMIN_USER=admin
+export ADMIN_PASS=your-password-here
+npm start
+```
+
+Defaults: `ADMIN_USER=admin`, `ADMIN_PASS=changeme` (please change before exposing the server).
+
 
 Quick edits you should make
 - Replace "Your Name" with your real name in `profile.html` (title, hero, footer)
