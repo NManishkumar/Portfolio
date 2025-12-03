@@ -3,13 +3,13 @@
 This workspace contains an upgraded single-page portfolio.
 
 Files added/changed
-- `profile.html` — the main single-page portfolio (open in browser)
+ - `index.html` — the main single-page portfolio (open in browser)
 - `css/styles.css` — main stylesheet (light + dark variables)
 - `js/main.js` — interactions: dark-mode, nav, form UX
 - `images/avatar.svg` — placeholder avatar used in the layout
 
 How to view
-1. Open `profile.html` in your browser (double-click or `open profile.html` on macOS)
+1. Open `index.html` in your browser (double-click or `open index.html` on macOS)
 
 Optional: local submission server
 --------------------------------
@@ -41,9 +41,8 @@ Quick edits you should make
 Personalization already applied for:
 Email: nn9713@srmist.edu.in
 
-The hero/profile photo should be placed in the `images/` folder as `images/myPhoto.jpg` (the page references `images/myPhoto.jpg`).
-If you prefer the image in a different location, update the `src` in the `<img class="floating-hero">` element in `profile.html`.
-- If you prefer the image in a different location, update the `src` in the `<div class="floating-pic">` element in `profile.html`.
+The hero/profile photo is `myphoto.jpg` at the project root and referenced from `index.html`.
+If you prefer to keep images inside an `images/` folder, move the file and update the `<img class="floating-hero">` src accordingly in `index.html` and `details.html`.
 
 Questions for you (to finalize the portfolio)
 - Full name and short tagline/bio?
