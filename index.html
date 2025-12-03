@@ -3,29 +3,135 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>NADIMINTI MANISH KUMAR — Portfolio</title>
-    <meta name="description" content="Redirecting to portfolio" />
-    <!-- Instant redirect for browsers and crawlers -->
-    <meta http-equiv="refresh" content="0; url=/profile.html">
-    <link rel="canonical" href="/profile.html">
-    <style>
-      /* Minimal fallback styling */
-      body{font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;background:#071227;color:#e6eef6}
-      .box{max-width:680px;padding:24px;border-radius:12px;background:rgba(255,255,255,0.03);text-align:center}
-      a{color:#22c1c3}
-    </style>
+    <meta name="description" content="Personal portfolio — projects, skills and contact." />
+  <meta name="author" content="NADIMINTI MANISH KUMAR" />
+  <title>NADIMINTI MANISH KUMAR — Portfolio</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="icon" href="images/avatar.svg" type="image/svg+xml">
+  <meta property="og:title" content="NADIMINTI MANISH KUMAR — Portfolio">
+  <meta property="og:description" content="A concise portfolio showcasing projects, skills and contact information by Nadiminti Manish Kumar.">
+  <meta property="og:image" content="images/myPhoto.jpg">
+    <script type="application/ld+json">
+      {"@context":"https://schema.org","@type":"Person","name":"NADIMINTI MANISH KUMAR","url":"","sameAs":["https://github.com/NManishkumar"]}
+    </script>
   </head>
   <body>
-    <div class="box">
-      <h1>Redirecting to portfolio…</h1>
-      <p>If you are not redirected automatically, <a href="/profile.html">click here to open the portfolio</a>.</p>
-    </div>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="#">
+          <img src="myphoto.jpg" alt="avatar" class="brand-avatar">
+          <span class="brand-name">NADIMINTI MANISH KUMAR</span>
+        </a>
+        <nav class="nav" aria-label="Main navigation">
+          <button id="nav-toggle" class="nav-toggle" aria-expanded="false" aria-controls="nav-list">☰</button>
+          <ul id="nav-list" class="nav-list">
+            <li><a href="#about">About</a></li>
+            <li><a href="#projects">Projects</a></li>
+            <li><a href="#skills">Skills</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </nav>
+        <button id="color-mode" class="color-mode" aria-pressed="false" title="Toggle dark/light">🌓</button>
+      </div>
+    </header>
 
-    <script>
-      // JS fallback for environments that don't honor meta refresh
-      if (location.pathname === '/' || location.pathname === '/index.html') {
-        window.location.replace('/profile.html');
-      }
-    </script>
+    <main>
+      <section id="hero" class="hero">
+        <div class="container hero-inner">
+          <div class="hero-text">
+            <h1>Hi, I'm <span id="hero-name">NADIMINTI MANISH KUMAR</span>.</h1>
+            <p class="lead">I'm a 19‑year‑old B.Tech (2nd year) student at SRM University. I enjoy building accessible, performant websites and learning new web technologies.</p>
+            <p class="cta-row">
+              <a class="btn" href="#projects">See my work</a>
+              <a class="btn ghost" href="#contact">Reach me</a>
+            </p>
+            <p class="meta">Based in: SRM University. <a href="#">Download resume</a></p>
+          </div>
+          <div class="hero-avatar">
+            <a href="details.html" aria-label="View more about Nadiminti Manish Kumar">
+              <img src="myPhoto.jpg" alt="Your avatar" loading="lazy" class="floating-hero" id="hero-avatar-link">
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="section about">
+        <div class="container">
+          <h2>About</h2>
+          <p class="about-blurb">I'm a B.Tech (2nd year) student studying at SRM University. I focus on front-end development, accessibility and performance. Currently exploring modern JavaScript frameworks and UI design.</p>
+        </div>
+      </section>
+
+      <section id="projects" class="section projects">
+        <div class="container">
+          <h2>Selected Projects</h2>
+          <div class="grid projects-grid">
+            <article class="project-card">
+              <img src="QZ.png" alt="Quiz Master screenshot" class="project-screenshot">
+              <h3>Quiz Master</h3>
+              <p>Desktop quiz application built with Java Swing and a SQL backend. Features timed quizzes, scoring, question management, and persistent results via JDBC.</p>
+              <p class="project-links"><a href="#">Download (desktop app)</a> · <a href="https://github.com/NManishkumar/APP-quiz" target="_blank" rel="noopener">Code</a></p>
+            </article>
+            <article class="project-card">
+              <img src="LB.webp" alt="Library Management System screenshot" class="project-screenshot">
+              <h3>Library Management System</h3>
+              <p>A Library Management System created with JavaScript. It lets you manage books and members, issue and return books, search the catalog, and persist data locally or via a backend. Good for demos and small-scale usage.</p>
+              <p class="project-links"><a href="#" target="_blank" rel="noopener">Live (demo)</a> · <a href="https://github.com/NManishkumar/Library-Management-System" target="_blank" rel="noopener">Code</a></p>
+            </article>
+            <article class="project-card">
+              <img src="p3 .png" alt="Project screenshot" class="project-screenshot">
+              <h3>Project Three</h3>
+              <p>Short description of the project, tech used and your role.</p>
+              <p class="project-links"><a href="#">Live</a> · <a href="#">Code</a></p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="skills" class="section skills">
+        <div class="container">
+          <h2>Skills</h2>
+          <ul class="skill-list">
+            <li>HTML & CSS</li>
+            <li>JavaScript</li>
+            <li>Accessibility</li>
+            <li>Performance Optimization</li>
+            <li>React / Vue / Svelte</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact">
+        <div class="container">
+          <h2>Contact</h2>
+          <p>If you'd like to work together, reach out by email or visit my GitHub.</p>
+              <p>
+                <a href="mailto:nn9713@srmist.edu.in">nn9713@srmist.edu.in</a>
+                ·
+                <a href="https://github.com/NManishkumar" target="_blank" rel="noopener">GitHub</a>
+              </p>
+          <form id="contact-form" class="contact-form" action="https://formspree.io/f/your-form-id" method="POST">
+            <label for="name">Name</label>
+            <input id="name" name="name" required>
+            <label for="email">Email</label>
+            <input id="email" name="email" type="email" required>
+            <label for="message">Message</label>
+            <textarea id="message" name="message" rows="6" required></textarea>
+            <button type="submit" class="btn">Send message</button>
+            <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+  <p>© <span id="year"></span> NADIMINTI MANISH KUMAR · <a href="https://github.com/NManishkumar" target="_blank" rel="noopener">GitHub</a> · <a href="mailto:nn9713@srmist.edu.in">nn9713@srmist.edu.in</a></p>
+      </div>
+    </footer>
+
+    <!-- Bottom-right floating profile removed per request -->
+
+    <script src="js/main.js" defer></script>
   </body>
 </html>
