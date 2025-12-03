@@ -28,7 +28,31 @@ node server.js
 
 You can view all saved submissions at:
 
-http://localhost:3000/api/submissions
+1) Quick JSON + HTML viewer (no Node required)
+
+- A pre-generated HTML view is available at `data/submissions.html`. Run the generator to refresh it:
+
+```bash
+python3 scripts/generate_submissions_html.py
+open data/submissions.html
+```
+
+2) Using the provided Node server (optional - Node/npm required)
+
+- Start the server:
+
+```bash
+npm install
+npm start
+```
+
+- API endpoints:
+
+- GET /api/submissions — returns JSON backup and DB records (if sqlite3 is installed)
+- POST /api/submit — accept submission JSON and store it
+- GET /admin/submissions — simple HTML admin view (requires sqlite3 to be installed)
+
+Note: If you do not have npm on your machine, use the Python generator above to inspect submissions.
 
 
 Quick edits you should make

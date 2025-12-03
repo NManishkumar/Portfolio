@@ -1,0 +1,14 @@
+{
+  "name": "portfolio-server",
+  "version": "1.0.0",
+  "description": "Local server for portfolio submissions (SQLite + JSON backup)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "author": "NADIMINTI MANISH KUMAR",
+  "license": "MIT",
+  "dependencies": {
+    "sqlite3": "^5.1.6"
+  }
+}
