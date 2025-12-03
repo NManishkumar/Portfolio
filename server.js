@@ -49,6 +49,44 @@ if (!fs.existsSync(FILE)) fs.writeFileSync(FILE, '[]', 'utf8');
 // initialize sqlite if available
 initSqlite();
 
+// Admin credentials (use env vars in production). Default: admin / changeme
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASS || 'changeme';
+
+function sendUnauthorized(res) {
+  res.writeHead(401, { 'WWW-Authenticate': 'Basic realm="Admin Area"', 'Content-Type': 'text/plain' });
+  res.end('Unauthorized');
+}
+
+function checkAdminAuth(req, res) {
+  try {
+    const header = req.headers && req.headers.authorization;
+    if (!header) {
+      sendUnauthorized(res);
+      return false;
+    }
+    const m = header.match(/^Basic\s+(.*)$/i);
+    if (!m) {
+      sendUnauthorized(res);
+      return false;
+    }
+    const creds = Buffer.from(m[1], 'base64').toString('utf8');
+    const idx = creds.indexOf(':');
+    if (idx < 0) {
+      sendUnauthorized(res);
+      return false;
+    }
+    const user = creds.slice(0, idx);
+    const pass = creds.slice(idx + 1);
+    if (user === ADMIN_USER && pass === ADMIN_PASS) return true;
+    sendUnauthorized(res);
+    return false;
+  } catch (e) {
+    sendUnauthorized(res);
+    return false;
+  }
+}
+
 function readAll() {
   try {
     const raw = fs.readFileSync(FILE, 'utf8') || '[]';
@@ -140,6 +178,7 @@ const server = http.createServer((req, res) => {
 
   // admin HTML view to browse DB submissions quickly
   if (req.method === 'GET' && req.url === '/admin/submissions') {
+    if (!checkAdminAuth(req, res)) return; // require Basic auth
     // Admin HTML viewer: use SQLite if available, else read JSON backup
     if (hasSQLite && db) {
       return getAllFromDb((rows) => {
