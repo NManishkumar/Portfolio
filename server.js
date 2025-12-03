@@ -3,12 +3,15 @@
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-// sqlite3 for lightweight local DB storage
-let sqlite3;
+// sqlite3 for lightweight local DB storage (optional)
+let sqlite3 = null;
+let hasSQLite = false;
 try {
   sqlite3 = require('sqlite3').verbose();
+  hasSQLite = true;
 } catch (e) {
   sqlite3 = null;
+  hasSQLite = false;
 }
 
 const DATA_DIR = path.join(__dirname, 'data');
@@ -20,17 +23,23 @@ const DB_FILE = path.join(DATA_DIR, 'submissions.db');
 let db = null;
 
 function initSqlite() {
-  if (!sqlite3) return;
-  db = new sqlite3.Database(DB_FILE);
-  db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS submissions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT,
-      email TEXT,
-      message TEXT,
-      timestamp TEXT
-    )`);
-  });
+  if (!hasSQLite) return;
+  try {
+    db = new sqlite3.Database(DB_FILE);
+    db.serialize(() => {
+      db.run(`CREATE TABLE IF NOT EXISTS submissions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        email TEXT,
+        message TEXT,
+        timestamp TEXT
+      )`);
+    });
+  } catch (err) {
+    console.warn('Failed to initialize sqlite3:', err && err.message);
+    db = null;
+    hasSQLite = false;
+  }
 }
 
 // ensure data dir and file exist
@@ -54,22 +63,32 @@ function writeAll(arr) {
 }
 
 function insertToDb(obj) {
-  if (!db) return;
+  if (!hasSQLite || !db) return;
   try {
     const stmt = db.prepare('INSERT INTO submissions (name,email,message,timestamp) VALUES (?,?,?,?)');
-    stmt.run(obj.name || '', obj.email || '', obj.message || '', obj.timestamp || new Date().toISOString());
+    stmt.run(obj.name || '', obj.email || '', obj.message || '', obj.timestamp || new Date().toISOString(), (err) => {
+      if (err) console.warn('DB insert error:', err && err.message);
+    });
     stmt.finalize();
   } catch (e) {
-    console.warn('DB insert failed', e);
+    console.warn('DB insert failed', e && e.message);
   }
 }
 
 function getAllFromDb(cb) {
-  if (!db) return cb([]);
-  db.all('SELECT id,name,email,message,timestamp FROM submissions ORDER BY id DESC', (err, rows) => {
-    if (err) return cb([]);
-    cb(rows);
-  });
+  if (!hasSQLite || !db) return cb([]);
+  try {
+    db.all('SELECT id,name,email,message,timestamp FROM submissions ORDER BY id DESC', (err, rows) => {
+      if (err) {
+        console.warn('DB read error:', err && err.message);
+        return cb([]);
+      }
+      cb(rows || []);
+    });
+  } catch (e) {
+    console.warn('DB read failed', e && e.message);
+    cb([]);
+  }
 }
 
 const server = http.createServer((req, res) => {
@@ -121,22 +140,35 @@ const server = http.createServer((req, res) => {
 
   // admin HTML view to browse DB submissions quickly
   if (req.method === 'GET' && req.url === '/admin/submissions') {
-    if (!db) {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      return res.end('<p>SQLite not available. Install sqlite3 and restart the server to enable DB viewer.</p>');
+    // Admin HTML viewer: use SQLite if available, else read JSON backup
+    if (hasSQLite && db) {
+      return getAllFromDb((rows) => {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        let html = '<!doctype html><html><head><meta charset="utf-8"><title>Submissions</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #ddd}th{background:#f4f4f4}</style></head><body>';
+        html += '<h1>Visitor Submissions</h1>';
+        html += '<p><a href="/">Back</a></p>';
+        html += '<table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Timestamp</th></tr></thead><tbody>';
+        for (const r of rows) {
+          html += `<tr><td>${r.id}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.email)}</td><td>${escapeHtml(r.message)}</td><td>${r.timestamp}</td></tr>`;
+        }
+        html += '</tbody></table></body></html>';
+        return res.end(html);
+      });
     }
-    return getAllFromDb((rows) => {
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      let html = '<!doctype html><html><head><meta charset="utf-8"><title>Submissions</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #ddd}th{background:#f4f4f4}</style></head><body>';
-      html += '<h1>Visitor Submissions</h1>';
-      html += '<p><a href="/">Back</a></p>';
-      html += '<table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Message</th><th>Timestamp</th></tr></thead><tbody>';
-      for (const r of rows) {
-        html += `<tr><td>${r.id}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.email)}</td><td>${escapeHtml(r.message)}</td><td>${r.timestamp}</td></tr>`;
-      }
-      html += '</tbody></table></body></html>';
-      return res.end(html);
-    });
+
+    // Fallback to JSON backup
+    const all = readAll().slice().reverse();
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    let html = '<!doctype html><html><head><meta charset="utf-8"><title>Submissions</title><style>body{font-family:Arial,Helvetica,sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #ddd}th{background:#f4f4f4}</style></head><body>';
+    html += '<h1>Visitor Submissions (JSON backup)</h1>';
+    html += '<p><a href="/">Back</a></p>';
+    html += '<table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Message</th><th>Timestamp</th></tr></thead><tbody>';
+    let i = 1;
+    for (const r of all) {
+      html += `<tr><td>${i++}</td><td>${escapeHtml(r.name)}</td><td>${escapeHtml(r.email)}</td><td>${escapeHtml(r.message)}</td><td>${escapeHtml(r.timestamp)}</td></tr>`;
+    }
+    html += '</tbody></table></body></html>';
+    return res.end(html);
   }
 
   // helper for escaping
