@@ -1,0 +1,143 @@
+/* Modern portfolio styles (light + dark) */
+:root{
+  --bg:#0b1120;
+  --surface:#0f1724;
+  --muted:#9aa4b2;
+  --accent:#22c1c3;
+  --text:#e6eef6;
+  --glass: rgba(255,255,255,0.03);
+  --radius:12px;
+  --max-width:1100px;
+}
+
+/* Light mode overrides */
+:root.light{
+  --bg:#f7f9fb;
+  --surface:#ffffff;
+  --muted:#475569;
+  --accent:#0f62fe;
+  --text:#071032;
+  --glass: rgba(2,6,23,0.04);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  background:linear-gradient(180deg,var(--bg), #071227 80%);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+.container{max-width:var(--max-width);margin:0 auto;padding:24px}
+.header-inner{display:flex;align-items:center;gap:16px;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:inherit}
+.brand-avatar{width:44px;height:44px;border-radius:50%;background:var(--glass);padding:6px}
+.brand-name{font-weight:600}
+.nav-list{list-style:none;margin:0;padding:0;display:flex;gap:12px}
+.nav-list a{color:var(--muted);text-decoration:none;padding:8px;border-radius:8px}
+.nav-list a:hover{color:var(--text);background:rgba(255,255,255,0.02)}
+.nav-toggle{display:none}
+.color-mode{background:transparent;border:0;color:var(--muted);font-size:18px;padding:8px;border-radius:8px}
+
+/* Hero */
+.hero{padding:64px 0}
+.hero-inner{display:grid;grid-template-columns:1fr 320px;gap:32px;align-items:center}
+.hero-text h1{font-size:2.2rem;margin:0 0 8px}
+.lead{color:var(--muted);margin:0 0 16px}
+.btn{display:inline-block;background:var(--accent);color:white;padding:10px 16px;border-radius:10px;text-decoration:none}
+.btn.ghost{background:transparent;border:1px solid rgba(255,255,255,0.06)}
+.hero-avatar{display:flex;align-items:center;justify-content:center}
+.hero-avatar img{width:100%;max-width:300px;border-radius:16px;border:6px solid rgba(255,255,255,0.03);box-shadow:0 6px 30px rgba(2,6,23,0.6)}
+
+/* Floating/circular variant for the hero avatar */
+.hero-avatar img.floating-hero{
+  width:220px;
+  height:220px;
+  max-width:none;
+  border-radius:50%;
+  border:5px solid rgba(255,255,255,0.04);
+  object-fit:cover;
+  position:relative;
+  z-index:2;
+  /* brighter cyan glow */
+  box-shadow:
+    0 0 40px 22px rgba(34,193,195,0.28),
+    0 14px 48px rgba(34,193,195,0.22),
+    0 24px 64px rgba(2,6,23,0.7);
+  animation: floatPop 1s cubic-bezier(.2,.9,.3,1) forwards, floatMove 6s ease-in-out 0.2s infinite;
+}
+
+/* ringPulse removed — ring is a steady glow now */
+.meta{color:var(--muted);font-size:0.9rem}
+
+/* Neon circular outline (pseudo-element) for hero avatar */
+.hero-avatar img.floating-hero::after{
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: calc(100% + 34px);
+  height: calc(100% + 34px);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 1; /* behind the image (image has z-index:2) */
+  border: 2px solid rgba(34,193,195,0.95);
+  filter: blur(4px);
+  box-shadow: 0 0 28px rgba(34,193,195,0.9), 0 0 60px rgba(34,193,195,0.35);
+}
+
+.section{padding:48px 0}
+.section h2{margin-top:0}
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.project-card{background:var(--surface);padding:14px;border-radius:12px;box-shadow:0 6px 18px rgba(2,6,23,0.5)}
+.project-card h3{margin:10px 0 6px}
+.project-screenshot{width:100%;height:140px;object-fit:cover;border-radius:8px}
+.project-links a{color:var(--accent);text-decoration:none}
+
+.skill-list{display:flex;flex-wrap:wrap;gap:8px;padding:0;margin:0;list-style:none}
+.skill-list li{background:var(--glass);padding:8px 12px;border-radius:999px;color:var(--muted)}
+
+.contact-form{display:grid;gap:8px;max-width:520px}
+.contact-form input,.contact-form textarea{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit}
+.form-status{color:var(--muted);margin-top:8px}
+
+.site-footer{padding:24px 0;border-top:1px solid rgba(255,255,255,0.03);color:var(--muted)}
+.footer-inner{display:flex;justify-content:space-between;align-items:center}
+
+/* Responsive */
+@media (max-width:880px){
+  .hero-inner{grid-template-columns:1fr}
+  .nav-list{display:none;position:absolute;top:68px;right:24px;background:var(--surface);padding:12px;border-radius:12px;box-shadow:0 10px 30px rgba(2,6,23,0.6)}
+  .nav-toggle{display:block;border:0;background:transparent;color:var(--muted)}
+}
+
+/* small touches */
+a{color:var(--accent)}
+button{cursor:pointer}
+
+/* bottom-right floating picture removed; related CSS cleared */
+
+@keyframes floatPop{
+  0%{transform:scale(0);opacity:0}
+  60%{transform:scale(1.06);opacity:1}
+  100%{transform:scale(1);opacity:1}
+}
+
+@keyframes floatMove{
+  0%{transform:translateY(0) translateX(0) scale(1)}
+  25%{transform:translateY(-10px) translateX(6px) scale(1)}
+  50%{transform:translateY(0) translateX(0) scale(1)}
+  75%{transform:translateY(8px) translateX(-6px) scale(1)}
+  100%{transform:translateY(0) translateX(0) scale(1)}
+}
+
+/* Page transition animations: exit (slide left) and entry (slide in from right) */
+main{transition:transform 480ms cubic-bezier(.2,.9,.3,1);}
+/* prevent scroll while animating */
+body.animate-exit{overflow:hidden}
+body.animate-exit main{transform:translateX(-100%);opacity:0.98}
+/* when a page includes `page-enter` on body, the main starts translated to right; removing the class triggers the slide-in */
+body.page-enter main{transform:translateX(100%)}

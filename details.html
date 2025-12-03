@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>About — NADIMINTI MANISH KUMAR</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+      /* Small page-specific overrides for the details page */
+      .details-hero{
+        display:flex;
+        align-items:center;
+        gap:2rem;
+        padding:3rem 1rem;
+      }
+      .details-avatar{
+        width:220px;
+        height:220px;
+        border-radius:50%;
+        overflow:hidden;
+        flex:0 0 220px;
+        box-shadow:0 8px 30px rgba(0,0,0,0.25), 0 0 30px rgba(0,200,255,0.08);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+      }
+      .details-avatar img{width:100%;height:100%;object-fit:cover;display:block}
+      .details-content{max-width:720px}
+      .details-list{list-style:none;padding:0;margin:0;display:grid;gap:.5rem}
+      .details-list li{background:rgba(0,0,0,0.03);padding:.6rem 1rem;border-radius:8px}
+      @media (max-width:700px){
+        .details-hero{flex-direction:column;text-align:center}
+        .details-avatar{width:180px;height:180px}
+      }
+    </style>
+  </head>
+  <body class="page-enter">
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="profile.html">
+          <img src="images/avatar.svg" alt="avatar" class="brand-avatar">
+          <span class="brand-name">NADIMINTI MANISH KUMAR</span>
+        </a>
+      </div>
+    </header>
+
+    <main>
+      <section class="section details-hero container">
+        <div class="details-avatar">
+          <img src="myPhoto.jpg" alt="Manish photo">
+        </div>
+        <div class="details-content">
+          <h1>NADIMINTI MANISH KUMAR</h1>
+          <p class="lead">Personal details and contact information.</p>
+          <ul class="details-list">
+            <li><strong>Date of birth:</strong> 6 May 2006</li>
+            <li><strong>Phone:</strong> +91 91107 60173</li>
+            <li><strong>Personal email:</strong> <a href="mailto:manishkumarseilu@gmail.com">manishkumarseilu@gmail.com</a></li>
+            <li><strong>Present:</strong> B.Tech — 2nd year</li>
+          </ul>
+          <p style="margin-top:1rem;"><a class="btn" href="profile.html">Back to portfolio</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <p>© <span id="year-footer"></span> NADIMINTI MANISH KUMAR · <a href="https://github.com/NManishkumar" target="_blank" rel="noopener">GitHub</a></p>
+      </div>
+    </footer>
+
+    <script>
+      // populate footer year
+      document.getElementById('year-footer').textContent = new Date().getFullYear();
+
+      // Trigger slide-in entry animation: remove the `page-enter` class after paint so CSS transition runs
+      (function(){
+        // run on next frame so initial translated state is painted
+        requestAnimationFrame(() => {
+          // small timeout to ensure layout; removal will trigger transition from 100% -> 0
+          setTimeout(() => document.body.classList.remove('page-enter'), 20);
+        });
+      })();
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Node / package manager
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Editor
+.vscode/
+.idea/
+
+# Local data and env
+data/submissions.json
+.env
