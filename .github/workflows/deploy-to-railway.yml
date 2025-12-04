@@ -1,0 +1,47 @@
+name: Deploy to Railway (via Railway CLI)
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install Railway CLI
+        run: npm install -g @railway/cli
+
+      - name: Login to Railway
+        env:
+          RAILWAY_API_KEY: ${{ secrets.RAILWAY_API_KEY }}
+        run: |
+          if [ -z "$RAILWAY_API_KEY" ]; then echo "Missing RAILWAY_API_KEY secret"; exit 1; fi
+          railway login --apiKey "$RAILWAY_API_KEY"
+
+      - name: Deploy with Railway
+        env:
+          RAILWAY_PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          RAILWAY_SERVICE_ID: ${{ secrets.RAILWAY_SERVICE_ID }}
+        run: |
+          # If you set project/service ids, railway up will target them; otherwise it will try to infer from the repo
+          if [ -n "$RAILWAY_PROJECT_ID" ] && [ -n "$RAILWAY_SERVICE_ID" ]; then
+            railway up --projectId "$RAILWAY_PROJECT_ID" --serviceId "$RAILWAY_SERVICE_ID" --yes
+          else
+            railway up --yes
+          fi
+
+      - name: Done
+        run: echo "Railway deploy attempted. Check Railway dashboard for status/logs."
+
+# NOTES:
+# - Before enabling this workflow, add the GitHub repository secret RAILWAY_API_KEY (a Railway personal API key).
+# - Optionally add RAILWAY_PROJECT_ID and RAILWAY_SERVICE_ID if you want to target a specific Railway project/service.
+# - This workflow installs the Railway CLI and runs `railway up` — it requires that the Railway API key has deploy permissions.
