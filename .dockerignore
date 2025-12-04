@@ -1,0 +1,10 @@
+node_modules
+.git
+data/*.db
+data/*.sqlite
+data/submissions.html
+data/submissions.json
+npm-debug.log
+Dockerfile
+README.md
+.env
