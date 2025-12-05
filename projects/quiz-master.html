@@ -1,10 +1,11 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Quiz Master — Project Detail</title>
-    <link rel="stylesheet" href="/css/styles.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Quiz Master — Project Detail</title>
+  <!-- use relative paths so the page works when opened locally or from subpaths -->
+  <link rel="stylesheet" href="../css/styles.css">
     <style>
       .project-hero{display:flex;gap:24px;align-items:flex-start}
       .project-hero img{max-width:360px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.12)}
@@ -17,13 +18,13 @@
   </head>
   <body>
     <main class="content">
-      <a href="/" class="btn" style="margin-bottom:12px;display:inline-block">← Back to portfolio</a>
+  <a href="../index.html" class="btn" style="margin-bottom:12px;display:inline-block">← Back to portfolio</a>
       <h1>Quiz Master</h1>
       <p class="meta">Desktop quiz application • Java Swing UI • JDBC-backed persistence</p>
 
       <section class="project-hero">
         <div>
-          <img src="/assets/quiz-master/demo1.svg" alt="Quiz Master UI - Home" loading="lazy">
+          <img src="../assets/quiz-master/demo1.svg" alt="Quiz Master UI - Home" loading="lazy">
         </div>
         <div>
           <h2>Overview</h2>
@@ -49,9 +50,9 @@
         <h3>Screenshots & demo</h3>
         <p>Click any image to open it in a new tab. Replace these placeholder images with real screenshots in <code>/assets/quiz-master/</code> if you have them.</p>
         <div class="gallery">
-          <a href="/assets/quiz-master/demo1.svg" target="_blank" rel="noopener"><img src="/assets/quiz-master/demo1.svg" alt="Quiz Master - Home"></a>
-          <a href="/assets/quiz-master/demo2.svg" target="_blank" rel="noopener"><img src="/assets/quiz-master/demo2.svg" alt="Quiz Master - Quiz running"></a>
-          <a href="/assets/quiz-master/demo3.svg" target="_blank" rel="noopener"><img src="/assets/quiz-master/demo3.svg" alt="Quiz Master - Results"></a>
+          <a href="../assets/quiz-master/demo1.svg" target="_blank" rel="noopener"><img src="../assets/quiz-master/demo1.svg" alt="Quiz Master - Home"></a>
+          <a href="../assets/quiz-master/demo2.svg" target="_blank" rel="noopener"><img src="../assets/quiz-master/demo2.svg" alt="Quiz Master - Quiz running"></a>
+          <a href="../assets/quiz-master/demo3.svg" target="_blank" rel="noopener"><img src="../assets/quiz-master/demo3.svg" alt="Quiz Master - Results"></a>
         </div>
       </section>
 
@@ -63,7 +64,7 @@
           <li>JDBC for SQL persistence (works with SQLite, MySQL, Postgres)</li>
           <li>Maven or Gradle build scripts (source repo contains instructions)</li>
         </ul>
-        <p class="meta">If you'd like, I can add a small live web demo (HTML/JS) that mimics the quiz flow for quick preview on the portfolio.</p>
+  <p class="meta">If you'd like, I can add a small live web demo (HTML/JS) that mimics the quiz flow for quick preview on the portfolio.</p>
       </section>
 
       <section style="margin-top:20px">
