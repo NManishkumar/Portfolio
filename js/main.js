@@ -162,4 +162,28 @@
     // gracefully ignore if DOM API not present
     console.warn('transition hook error', e);
   }
+
+  // Make project cards clickable if they include a data-href attribute
+  try {
+    document.querySelectorAll('.project-card[data-href]').forEach(card => {
+      const href = card.getAttribute('data-href');
+      // click -> navigate (but ignore clicks on inner links/buttons)
+      card.addEventListener('click', (ev) => {
+        const target = ev.target;
+        if (target && (target.closest('a') || target.closest('button') || target.tagName === 'A' || target.tagName === 'BUTTON')) return;
+        // animate exit like avatar link
+        document.body.classList.add('animate-exit');
+        setTimeout(() => { window.location.href = href; }, 420);
+      });
+      // allow Enter / Space to activate when focused
+      card.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') {
+          ev.preventDefault();
+          card.click();
+        }
+      });
+    });
+  } catch (err) {
+    console.warn('project card click hook failed', err);
+  }
 })();
