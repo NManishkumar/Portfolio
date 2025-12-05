@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Quiz Master — Project Detail</title>
+    <link rel="stylesheet" href="/css/styles.css">
+    <style>
+      .project-hero{display:flex;gap:24px;align-items:flex-start}
+      .project-hero img{max-width:360px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+      .gallery{display:flex;gap:12px;margin-top:18px}
+      .gallery img{width:220px;height:150px;object-fit:cover;border-radius:6px;border:1px solid #e6e6e6}
+      .content{max-width:900px;margin:0 auto;padding:28px}
+      .meta{color:#666;font-size:.95rem}
+      .btn{display:inline-block;padding:8px 12px;border-radius:6px;background:#0366d6;color:#fff;text-decoration:none}
+    </style>
+  </head>
+  <body>
+    <main class="content">
+      <a href="/" class="btn" style="margin-bottom:12px;display:inline-block">← Back to portfolio</a>
+      <h1>Quiz Master</h1>
+      <p class="meta">Desktop quiz application • Java Swing UI • JDBC-backed persistence</p>
+
+      <section class="project-hero">
+        <div>
+          <img src="/assets/quiz-master/demo1.svg" alt="Quiz Master UI - Home" loading="lazy">
+        </div>
+        <div>
+          <h2>Overview</h2>
+          <p>Quiz Master is a desktop quiz application I built using Java Swing. It supports timed quizzes, configurable question sets, per-user scoring, and persistent storage using a SQL database via JDBC.</p>
+          <p>The application is suitable for classroom practice, small competitions, and self-study. It demonstrates UI design with Swing, data modelling, and JDBC integration for reliable persistence.</p>
+          <p><strong>Code:</strong> <a href="https://github.com/NManishkumar/APP-quiz" target="_blank" rel="noopener">GitHub repository</a></p>
+          <p><strong>Download:</strong> Desktop JAR available in the repo's Releases (or compile from source).</p>
+        </div>
+      </section>
+
+      <section style="margin-top:20px">
+        <h3>Key features</h3>
+        <ul>
+          <li>Timed quizzes with per-question time limits and an overall timer</li>
+          <li>Question management: add, edit, import/export question sets (CSV)</li>
+          <li>Scoring and result persistence using a SQL database (MySQL / SQLite via JDBC)</li>
+          <li>Configurable difficulty levels and categories</li>
+          <li>Admin view for reviewing results and managing questions</li>
+        </ul>
+      </section>
+
+      <section style="margin-top:18px">
+        <h3>Screenshots & demo</h3>
+        <p>Click any image to open it in a new tab. Replace these placeholder images with real screenshots in <code>/assets/quiz-master/</code> if you have them.</p>
+        <div class="gallery">
+          <a href="/assets/quiz-master/demo1.svg" target="_blank" rel="noopener"><img src="/assets/quiz-master/demo1.svg" alt="Quiz Master - Home"></a>
+          <a href="/assets/quiz-master/demo2.svg" target="_blank" rel="noopener"><img src="/assets/quiz-master/demo2.svg" alt="Quiz Master - Quiz running"></a>
+          <a href="/assets/quiz-master/demo3.svg" target="_blank" rel="noopener"><img src="/assets/quiz-master/demo3.svg" alt="Quiz Master - Results"></a>
+        </div>
+      </section>
+
+      <section style="margin-top:22px">
+        <h3>Architecture & tech</h3>
+        <p>This project uses:</p>
+        <ul>
+          <li>Java 8+ with Swing for the desktop UI</li>
+          <li>JDBC for SQL persistence (works with SQLite, MySQL, Postgres)</li>
+          <li>Maven or Gradle build scripts (source repo contains instructions)</li>
+        </ul>
+        <p class="meta">If you'd like, I can add a small live web demo (HTML/JS) that mimics the quiz flow for quick preview on the portfolio.</p>
+      </section>
+
+      <section style="margin-top:20px">
+        <h3>How to run (dev)</h3>
+        <ol>
+          <li>Clone the repo: <code>git clone https://github.com/NManishkumar/APP-quiz</code></li>
+          <li>Open the project in your IDE (IntelliJ / Eclipse). Build with Maven or Gradle.</li>
+          <li>Run the main class (the README in the repo shows the entry point). For a built JAR: <code>java -jar quiz-master.jar</code></li>
+          <li>The app will create a local SQLite DB by default (or connect to configured DB via JDBC URL).</li>
+        </ol>
+      </section>
+
+      <footer style="margin-top:36px;color:#666">Questions or want the web demo? <a href="/contact">Contact me</a>.</footer>
+    </main>
+  </body>
+</html>
