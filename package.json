@@ -9,6 +9,7 @@
   "author": "NADIMINTI MANISH KUMAR",
   "license": "MIT",
   "dependencies": {
-    "sqlite3": "^5.1.6"
+    "sqlite3": "^5.1.6",
+    "mysql2": "^3.3.0"
   }
 }

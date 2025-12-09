@@ -14,6 +14,18 @@ try {
   hasSQLite = false;
 }
 
+// optional MySQL support via mysql2
+let mysql = null;
+let hasMySQL = false;
+let mysqlPool = null;
+try {
+  mysql = require('mysql2/promise');
+  hasMySQL = true;
+} catch (e) {
+  mysql = null;
+  hasMySQL = false;
+}
+
 const DATA_DIR = path.join(__dirname, 'data');
 const FILE = path.join(DATA_DIR, 'submissions.json');
 const PORT = process.env.PORT || 3000;
@@ -42,12 +54,39 @@ function initSqlite() {
   }
 }
 
+async function initMySQL() {
+  if (!hasMySQL) return;
+  try {
+    const host = process.env.MYSQL_HOST || 'db';
+    const user = process.env.MYSQL_USER || 'root';
+    const password = process.env.MYSQL_PASSWORD || process.env.MYSQL_PASS || '';
+    const database = process.env.MYSQL_DATABASE || process.env.MYSQL_DB || 'portfolio';
+    const port = process.env.MYSQL_PORT ? Number(process.env.MYSQL_PORT) : 3306;
+    mysqlPool = mysql.createPool({ host, user, password, database, port, waitForConnections: true, connectionLimit: 10 });
+    // ensure database/table exists (create table if not exists)
+    await mysqlPool.query(`CREATE TABLE IF NOT EXISTS submissions (
+      id INT AUTO_INCREMENT PRIMARY KEY,
+      name TEXT,
+      email TEXT,
+      message TEXT,
+      timestamp TEXT
+    )`);
+    console.log('MySQL pool initialized');
+  } catch (err) {
+    console.warn('Failed to initialize MySQL:', err && err.message);
+    mysqlPool = null;
+    hasMySQL = false;
+  }
+}
+
 // ensure data dir and file exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
 if (!fs.existsSync(FILE)) fs.writeFileSync(FILE, '[]', 'utf8');
 
 // initialize sqlite if available
 initSqlite();
+// initialize MySQL if available
+initMySQL();
 
 // Admin credentials (use env vars in production). Default: admin / changeme
 const ADMIN_USER = process.env.ADMIN_USER || 'admin';
@@ -101,6 +140,17 @@ function writeAll(arr) {
 }
 
 function insertToDb(obj) {
+  // Prefer MySQL if available
+  if (hasMySQL && mysqlPool) {
+    try {
+      mysqlPool.query('INSERT INTO submissions (name,email,message,timestamp) VALUES (?,?,?,?)', [obj.name || '', obj.email || '', obj.message || '', obj.timestamp || new Date().toISOString()])
+        .catch(err => console.warn('MySQL insert error:', err && err.message));
+      return;
+    } catch (e) {
+      console.warn('MySQL insert failed', e && e.message);
+    }
+  }
+  // Fallback to sqlite
   if (!hasSQLite || !db) return;
   try {
     const stmt = db.prepare('INSERT INTO submissions (name,email,message,timestamp) VALUES (?,?,?,?)');
@@ -114,6 +164,22 @@ function insertToDb(obj) {
 }
 
 function getAllFromDb(cb) {
+  // Prefer MySQL
+  if (hasMySQL && mysqlPool) {
+    try {
+      mysqlPool.query('SELECT id,name,email,message,timestamp FROM submissions ORDER BY id DESC')
+        .then(([rows]) => cb(rows || []))
+        .catch(err => {
+          console.warn('MySQL read error:', err && err.message);
+          cb([]);
+        });
+      return;
+    } catch (e) {
+      console.warn('MySQL read failed', e && e.message);
+      return cb([]);
+    }
+  }
+  // Fallback to sqlite
   if (!hasSQLite || !db) return cb([]);
   try {
     db.all('SELECT id,name,email,message,timestamp FROM submissions ORDER BY id DESC', (err, rows) => {
